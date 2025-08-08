@@ -179,6 +179,30 @@ class VectorStore:
             ids=ids
         )
     
+    def get_lesson_link(self, course_title: str, lesson_number: int) -> Optional[str]:
+        """Retrieve lesson link for a specific course and lesson number"""
+        import json
+        try:
+            # Query course_catalog for the specific course
+            results = self.course_catalog.get(
+                ids=[course_title]
+            )
+            
+            if results['metadatas'] and results['metadatas'][0]:
+                metadata = results['metadatas'][0]
+                lessons_json = metadata.get('lessons_json')
+                
+                if lessons_json:
+                    lessons_data = json.loads(lessons_json)
+                    # Find the lesson with matching lesson_number
+                    for lesson in lessons_data:
+                        if lesson.get('lesson_number') == lesson_number:
+                            return lesson.get('lesson_link')
+        except Exception as e:
+            print(f"Error retrieving lesson link: {e}")
+        
+        return None
+    
     def clear_all_data(self):
         """Clear all data from both collections"""
         try:

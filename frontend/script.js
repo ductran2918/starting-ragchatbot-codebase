@@ -1,5 +1,5 @@
-// API base URL - use relative path to work from any host
-const API_URL = '/api';
+// API base URL - point to backend server
+const API_URL = 'http://127.0.0.1:8000/api';
 
 // Global state
 let currentSessionId = null;
@@ -122,10 +122,26 @@ function addMessage(content, type, sources = null, isWelcome = false) {
     let html = `<div class="message-content">${displayContent}</div>`;
     
     if (sources && sources.length > 0) {
+        // Handle sources - they can be strings (old format) or objects with name/link
+        const formattedSources = sources.map(source => {
+            if (typeof source === 'string') {
+                // Legacy string format
+                return source;
+            } else if (source && source.name) {
+                // New object format with optional link
+                if (source.link) {
+                    return `<a href="${source.link}" target="_blank" rel="noopener noreferrer" class="source-link">${source.name}</a>`;
+                } else {
+                    return source.name;
+                }
+            }
+            return 'Unknown source';
+        }).join(', ');
+        
         html += `
             <details class="sources-collapsible">
                 <summary class="sources-header">Sources</summary>
-                <div class="sources-content">${sources.join(', ')}</div>
+                <div class="sources-content">${formattedSources}</div>
             </details>
         `;
     }
