@@ -1,0 +1,36 @@
+#!/bin/bash
+
+# implement-feature - Custom command to implement frontend features
+# Usage: ./implement-feature "feature description"
+
+if [ $# -eq 0 ]; then
+    echo "Usage: implement-feature \"feature description\""
+    echo "Example: implement-feature \"Add dark mode toggle to the UI\""
+    exit 1
+fi
+
+# Get the feature description from arguments
+FEATURE_DESC="$*"
+
+# Path to the command template
+COMMAND_FILE=".claude/commands/implement-feature.md"
+
+if [ ! -f "$COMMAND_FILE" ]; then
+    echo "Error: Command template not found at $COMMAND_FILE"
+    exit 1
+fi
+
+# Read the template and replace $ARGUMENTS with the feature description
+COMMAND_CONTENT=$(cat "$COMMAND_FILE" | sed "s/\$ARGUMENTS/$FEATURE_DESC/g")
+
+echo "🚀 Implementing frontend feature: $FEATURE_DESC"
+echo ""
+echo "Sending the following instruction to Claude Code:"
+echo "----------------------------------------"
+echo "$COMMAND_CONTENT"
+echo "----------------------------------------"
+echo ""
+
+# Execute the command by sending it to Claude Code
+# This assumes you're running this from within Claude Code
+echo "$COMMAND_CONTENT"

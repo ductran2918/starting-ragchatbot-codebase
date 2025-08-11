@@ -16,6 +16,15 @@ cd backend && uv run uvicorn app:app --reload --port 8000
 uv sync
 ```
 
+### Custom Commands
+```bash
+# Implement a new frontend feature
+./implement-feature "feature description"
+
+# Example
+./implement-feature "Add dark mode toggle to the UI"
+```
+
 ### Environment Setup
 Create `.env` file in root with:
 ```
